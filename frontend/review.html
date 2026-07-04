@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload an Item</title> 
+</head>
+<body>
+<p>Upload a piece of clothing with your information to help the community find their best fit!</p>
+<form>
+    <label for="brand">Brand:</label>
+    <input type="text" id="brand" name="brand" placeholder="ex: Hollister" required><br><br>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" placeholder="ex: Air Jordan 1 Low" required><br><br>
+    <label for="category">Category:</label>
+    <select name="category" id="category">
+        <option value="" disabled selected>Select a category</option>
+        <option value="Shirts">Shirts</option>
+        <option value="Shoes">Shoes</option>
+    </select><br><br>
+    <label for="size">Size:</label>
+    <input type="text" id="size" name="size" placeholder="ex: M or 7.5" required><br><br>
+    <label for="gender">Gender (Optional):</label>
+    <select name="gender" id="gender">
+        <option value="" disabled selected>Select a category</option>
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+        <option value="Unisex">Unisex</option>
+    </select><br><br>
+    <label for="color">Color (Optional):</label>
+    <input type="text" id="color" name="color" placeholder="Blue"><br><br>
+    <label for="year">Year (Optional):</label>
+    <input type="number" id="year" name="year" placeholder="ex: 2023"><br><br>
+    <label for="photo">Photo:</label>
+    <input type="file" id="photo" name="photo" accept="image/*"><br><br> <!--accept for file types-->
+    <button type="submit">Submit!</button>
+
+</form>
+<nav> <!--stays the same bc need to access from all pages-->
+  <a href="intro.html">Home</a> |
+  <a href="review.html">Submit Review</a> |
+  <a href="search.html">Search Item</a> |
+</nav>
+
+</body>
+</html>
