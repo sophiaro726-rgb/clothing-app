@@ -11,7 +11,7 @@
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" placeholder="ex: Air Jordan 1 Low" required><br><br>
     <label for="category">Category:</label>
-    <select name="category" id="category">
+    <select name="category" id="category" required>
         <option value="" disabled selected>Select a category</option>
         <option value="Shirts">Shirts</option>
         <option value="Shoes">Shoes</option>
@@ -30,7 +30,7 @@
     <label for="year">Year (Optional):</label>
     <input type="number" id="year" name="year" placeholder="ex: 2023"><br><br>
     <label for="photo">Photo:</label>
-    <input type="file" id="photo" name="photo" accept="image/*"><br><br> <!--accept for file types-->
+    <input type="file" id="photo" name="photo" accept="image/*" required><br><br> <!--accept for file types-->
     <button type="submit">Submit!</button>
 
 </form>
