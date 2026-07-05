@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def intro():
-    return render_template('intro.html')
+    return render_template('intro.html') #grabs templates I made (as html) and applies to web page 
 #<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}"> #
 #flask has static files for style sheet 
 @app.route('/review.html')
@@ -15,4 +15,4 @@ def search():
     return render_template('search.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port = 8000) #starts server w this command
+    app.run(host="0.0.0.0", port = 8000) #starts server w this command & url matches 8000
