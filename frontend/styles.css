@@ -1,0 +1,29 @@
+body {
+  background-color: #6E8B7A;
+  color: #FFF5E7;
+  font-family: Georgia;
+  font-size: 120%;
+}
+nav {
+  background-color: #FFF5E7;
+  padding: 10px;
+}
+nav a {
+  color: #4A5D52;
+}
+button {
+  background-color: #AFC1B3;
+  color: #4A5D52;
+  padding: 10px;
+  font-family: Georgia;
+  font-size: 120%;
+  border-color: #4A5D52
+}
+input {
+  color: #142a1c;
+  font-family: Georgia;
+}
+select {
+  color: #142a1c;
+  font-family: Georgia;
+}
