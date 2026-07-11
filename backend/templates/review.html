@@ -6,7 +6,8 @@
 </head>
 <body>
 <p>Upload a piece of clothing with your information to help the community find their best fit!</p>
-<form>
+<form action ="/submittedreview.php" method = "POST"  enctype="multipart/form-data">
+  <!--action is url it goes to, method post means to send somewhere; get is to grab-->
     <label for="brand">Brand:</label>
     <input type="text" id="brand" name="brand" placeholder="ex: Hollister" required><br><br>
     <label for="name">Name:</label>
