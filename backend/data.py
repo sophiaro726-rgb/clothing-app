@@ -65,27 +65,30 @@ def searched():
     selectstring = "SELECT * from clothesinfo WHERE 1=1" #cannot put into execute yet bc we dont know what variables were given in search
     #doing 1=1 bc we ant to run regardless of hwat is input into the search, but we r gonna need to filter the "AND" to what was given
     variablesgiven = []
-    if rbrand is not None:
+    if rbrand is not None and rbrand != '': #nneded to add string bc if input nothing string then it wasnt counting as none 
         selectstring = selectstring + " AND LOWER(brand) = %s" #nned to include lowercase bc if input caps different from database 
         variablesgiven.append(rbrand.lower()) #for execute to search for the values needed in list 
-    if rname is not None:
+    if rname is not None and rname != '':
         selectstring = selectstring + " AND LOWER(name) = %s"
         variablesgiven.append(rname.lower())
-    if rcategory is not None:
+    if rcategory is not None and rcategory != '':
         selectstring = selectstring + " AND LOWER(category) = %s"
         variablesgiven.append(rcategory.lower())
-    if rsize is not None:
+    if rsize is not None and rsize != '':
         selectstring = selectstring + " AND LOWER(size) = %s"
         variablesgiven.append(rsize.lower())
-    if rgender is not None:
+    if rgender is not None and rgender != '':
         selectstring = selectstring + " AND LOWER(gender) = %s"
         variablesgiven.append(rgender.lower())
-    if rcolor is not None:
+    if rcolor is not None and rcolor != '':
         selectstring = selectstring + " AND LOWER(color) = %s"
         variablesgiven.append(rcolor.lower())
-    if ryear is not None:
+    if ryear is not None and ryear != '':
         selectstring = selectstring + " AND year = %s" #doesnt need lower bc int not text
         variablesgiven.append(ryear)
+    curr.execute(selectstring, variablesgiven)
+    return curr.fetchall()
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8000) #starts server w this command & url matches 8000
