@@ -2,11 +2,11 @@
 <html>
 <head>
   <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-<title>Make an Account</title> 
+<title>Login to an Account</title> 
 </head>
 <body>
-<p>Create an account using your email and password</p>
-<form action ="/signup.php" method = "POST">
+<p>Login to your account using your email and password</p>
+<form action ="/login.php" method = "POST">
   <!--action is url it goes to, method post means to send somewhere; get is to grab-->
     <label for="email">Email:</label>
     <input type="text" id="email" name="email" required><br><br>

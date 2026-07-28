@@ -20,6 +20,9 @@ def search():
 @app.route('/signup.html')
 def makeaccount():
     return render_template('signup.html')
+@app.route('/login.html')
+def existingaccount():
+    return render_template('login.html')
 
 
 #POSTGRES CODE
@@ -116,10 +119,25 @@ def hash_pwd(password:str, rounds=12) -> bytes:
 def signup():
     remail = request.form['email']
     rpassword = request.form['password']
-    hpassword = hash_pwd(rpassword)
+    hpassword = hash_pwd(rpassword).decode() #in hex need in bytes so decode it
     curr.execute("INSERT INTO userinfo (email, hashpassword) VALUES (%s, %s)", (remail, hpassword))
     conn.commit()
     return "the test worked"
+
+@app.route('/login.php', methods=['POST']) #just post used not get 
+def login():
+    remail = request.form['email']
+    rpassword = request.form['password']
+    curr.execute("SELECT email, hashpassword FROM userinfo WHERE email = %s", (remail,))
+    res = curr.fetchone() #emaisl r unique so fetchone
+    if res is None:
+        return "ERROR: An existing account does not exist with this email"
+    else:
+        check = bcrypt.checkpw(rpassword.encode(), res[1].encode()) #need to encode pass bc need str not bytes 
+        if check is True:
+            return "Login successful. Welcome back!"
+        else:
+            return "ERROR: Incorrect password"
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8000) #starts server w this command & url matches 8000
