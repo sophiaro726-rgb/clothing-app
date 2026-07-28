@@ -87,7 +87,22 @@ def searched():
         selectstring = selectstring + " AND year = %s" #doesnt need lower bc int not text
         variablesgiven.append(ryear)
     curr.execute(selectstring, variablesgiven)
-    return curr.fetchall()
+    res = curr.fetchall() #before dict it prints as j a list of each value w out key attached to value 
+    dictlist = [] #since gonna have multiple outpets, needs to be a list of dictionaries connecting the variables to the values
+    for vlist in res:
+        vdict = {
+            'id' : vlist[0], #starts w index
+            'brand' : vlist[1],
+            'name' : vlist[2],
+            'category' : vlist[3],
+            'size' : vlist[4],
+            'gender' : vlist[5],
+            'color' : vlist[6],
+            'year' : vlist[7],
+            'photo' : vlist[8], #need photo now bc this is the returned result 
+        }
+        dictlist.append(vdict)
+    return render_template('search.html', results = dictlist) #need results name bc unlike other pages it needs to grab info for as much data that matches the searched results
 
 
 if __name__ == '__main__':
