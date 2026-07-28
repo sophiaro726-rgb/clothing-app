@@ -2,6 +2,7 @@ from flask import Flask, render_template  #flask is used as the backend to play 
 #by receiving requests or data and deciding what to do w it
 import psycopg2 #for sql
 from flask import request 
+import bcrypt
 
 app = Flask(__name__)
 
@@ -16,6 +17,9 @@ def review():
 @app.route('/search.html')
 def search():
     return render_template('search.html')
+@app.route('/signup.html')
+def makeaccount():
+    return render_template('signup.html')
 
 
 #POSTGRES CODE
@@ -104,6 +108,18 @@ def searched():
         dictlist.append(vdict)
     return render_template('search.html', results = dictlist) #need results name bc unlike other pages it needs to grab info for as much data that matches the searched results
 
+def hash_pwd(password:str, rounds=12) -> bytes:
+    pwd = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
+    return pwd 
+
+@app.route('/signup.php', methods=['POST']) #just post used not get 
+def signup():
+    remail = request.form['email']
+    rpassword = request.form['password']
+    hpassword = hash_pwd(rpassword)
+    curr.execute("INSERT INTO userinfo (email, hashpassword) VALUES (%s, %s)", (remail, hpassword))
+    conn.commit()
+    return "the test worked"
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8000) #starts server w this command & url matches 8000

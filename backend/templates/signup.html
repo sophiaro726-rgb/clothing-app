@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+<title>Make an Account</title> 
+</head>
+<body>
+<p>Create an account using your email and password</p>
+<form action ="/signup.php" method = "POST">
+  <!--action is url it goes to, method post means to send somewhere; get is to grab-->
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Submit!</button><br><br>
+
+</form>
+
+<nav> <!--stays the same bc need to access from all pages-->
+  <a href="/">Home</a> |
+  <a href="review.html">Submit Review</a> |
+  <a href="search.html">Search Item</a> |
+  <a href="signup.html">Make an Account</a> |
+</nav>
+
+</body>
+</html>
