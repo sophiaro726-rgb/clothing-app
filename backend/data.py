@@ -114,7 +114,7 @@ def searched():
         dictlist.append(vdict)
     return render_template('search.html', results = dictlist) #need results name bc unlike other pages it needs to grab info for as much data that matches the searched results
 
-def hash_pwd(password:str, rounds=12) -> bytes:
+def hash_pwd(password:str, rounds=12) -> bytes: #https://www.youtube.com/watch?v=YIUNTJEQwQ4
     pwd = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
     return pwd 
 
@@ -141,7 +141,7 @@ def login():
         check = bcrypt.checkpw(rpassword.encode(), res[2].encode()) #need to encode pass bc need str not bytes 
         if check is True:
             session['userid'] = res[0] #id wasnt given ny user bc used email to sign in so need to grab id from table and set to session 
-            return f'Logged in as {session["userid"]}'
+            return f'Logged in as {session["userid"]}' #taken directly from flask website
             #return "Login successful. Welcome back!"
         else:
             return "ERROR: Incorrect password"
