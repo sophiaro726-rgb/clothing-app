@@ -1,7 +1,7 @@
 from flask import Flask, render_template  #flask is used as the backend to play as the messenger 
 #by receiving requests or data and deciding what to do w it
 import psycopg2 #for sql
-from flask import request 
+from flask import request, session #session for cookies and login save 
 import bcrypt
 
 app = Flask(__name__)
@@ -41,6 +41,8 @@ curr = conn.cursor()
 #connecting sql and submitted review 
 @app.route('/submittedreview.php', methods=['POST']) #just post used not get 
 def submitted():
+    if 'userid' not in session:
+        return 'ERROR: Please sign into an account to continue'
     rbrand = request.form['brand']
     rname = request.form['name']
     rcategory = request.form['category']
@@ -54,7 +56,8 @@ def submitted():
     f = request.files['photo'] #diff bc file 
     f.save('static/photos/' + f.filename) #dont want to hardcode name of file so not quotes to save into uploads file for flask 
     rphoto = f.filename
-    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto))
+    ruserid = session['userid']
+    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo, userid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto, ruserid))
     # columns, input values and not hard code, and then the variables being input 
     conn.commit()
     return "the test worked"
@@ -124,20 +127,30 @@ def signup():
     conn.commit()
     return "the test worked"
 
+app.secret_key = '675339bf8044ea91c16a2f59149c85092653f6231ebf9c55f8d08a8897cfc418' #generated 
+
 @app.route('/login.php', methods=['POST']) #just post used not get 
 def login():
     remail = request.form['email']
     rpassword = request.form['password']
-    curr.execute("SELECT email, hashpassword FROM userinfo WHERE email = %s", (remail,))
+    curr.execute("SELECT id, email, hashpassword FROM userinfo WHERE email = %s", (remail,))
     res = curr.fetchone() #emaisl r unique so fetchone
     if res is None:
         return "ERROR: An existing account does not exist with this email"
     else:
-        check = bcrypt.checkpw(rpassword.encode(), res[1].encode()) #need to encode pass bc need str not bytes 
+        check = bcrypt.checkpw(rpassword.encode(), res[2].encode()) #need to encode pass bc need str not bytes 
         if check is True:
-            return "Login successful. Welcome back!"
+            session['userid'] = res[0] #id wasnt given ny user bc used email to sign in so need to grab id from table and set to session 
+            return f'Logged in as {session["userid"]}'
+            #return "Login successful. Welcome back!"
         else:
             return "ERROR: Incorrect password"
+        
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there (FROM FLASK PAGE)
+    session.pop('userid', None)
+    return "You have been logged out"
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port = 8000) #starts server w this command & url matches 8000
