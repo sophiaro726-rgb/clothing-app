@@ -57,10 +57,11 @@ def submitted():
     f.save('static/photos/' + f.filename) #dont want to hardcode name of file so not quotes to save into uploads file for flask 
     rphoto = f.filename
     ruserid = session['userid']
-    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo, userid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto, ruserid))
+    rcomment = request.form['comment']
+    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo, userid, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto, ruserid, rcomment))
     # columns, input values and not hard code, and then the variables being input 
     conn.commit()
-    return "the test worked"
+    return "Your review was submitted"
 
 @app.route('/searchedreview.php', methods=['GET']) #just get not post bc only searching alr input data 
 def searched():
@@ -110,6 +111,7 @@ def searched():
             'color' : vlist[6],
             'year' : vlist[7],
             'photo' : vlist[8], #need photo now bc this is the returned result 
+            'comment' : vlist[10] #need comment bc returned result not searched & 9 is userid added
         }
         dictlist.append(vdict)
     return render_template('search.html', results = dictlist) #need results name bc unlike other pages it needs to grab info for as much data that matches the searched results
@@ -125,7 +127,7 @@ def signup():
     hpassword = hash_pwd(rpassword).decode() #in hex need in bytes so decode it
     curr.execute("INSERT INTO userinfo (email, hashpassword) VALUES (%s, %s)", (remail, hpassword))
     conn.commit()
-    return "the test worked"
+    return "The account was created"
 
 app.secret_key = '675339bf8044ea91c16a2f59149c85092653f6231ebf9c55f8d08a8897cfc418' #generated 
 

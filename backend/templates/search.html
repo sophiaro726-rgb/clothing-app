@@ -36,14 +36,21 @@
 
 <ul id="results"> <!--from flask website template to load new search results w out printing python list-->
   {% for result in results %}
-    <li>{{ result.brand }}</li>
-    <li>{{ result.name }}</li>
-    <li>{{ result.category }}</li>
-    <li>{{ result.size }}</li>
-    <li>{{ result.gender }}</li>
-    <li>{{ result.color }}</li>
-    <li>{{ result.year }}</li>
-    <img src= "{{url_for('static', filename='photos/' + result.photo)}}" width="300" height="400"> <!--pics are in photos inside static and want to display image not url -->
+    <li>Brand: {{ result.brand }}</li>
+    <li>Name: {{ result.name }}</li>
+    <li>Category: {{ result.category }}</li>
+    <li>Size: {{ result.size }}</li>
+    {% if result.gender is not none %}
+      <li>Gender: {{ result.gender }}</li>
+    {% endif %}
+    {% if result.color is not none %}
+      <li>Color: {{ result.color }}</li>
+    {% endif %}
+    {% if result.year is not none %}
+      <li>Year: {{ result.year }}</li>
+    {% endif %}
+    <img src= "{{url_for('static', filename='photos/' + result.photo)}}" width="200" height="300"> <!--pics are in photos inside static and want to display image not url -->
+    <li>Comment: {{ result.comment }}</li>
   {% endfor %}
 </ul>
 
