@@ -124,7 +124,7 @@ def hash_pwd(password:str, rounds=12) -> bytes: #https://www.youtube.com/watch?v
 def signup():
     remail = request.form['email']
     rpassword = request.form['password']
-    hpassword = hash_pwd(rpassword).decode() #in hex need in bytes so decode it
+    hpassword = hash_pwd(rpassword).decode() #in bytes so decode it to string bc TEXT type
     curr.execute("INSERT INTO userinfo (email, hashpassword) VALUES (%s, %s)", (remail, hpassword))
     conn.commit()
     return "The account was created"
@@ -136,11 +136,11 @@ def login():
     remail = request.form['email']
     rpassword = request.form['password']
     curr.execute("SELECT id, email, hashpassword FROM userinfo WHERE email = %s", (remail,))
-    res = curr.fetchone() #emaisl r unique so fetchone
+    res = curr.fetchone() #emails r unique so fetchone bc only 1 to grab if all different
     if res is None:
         return "ERROR: An existing account does not exist with this email"
     else:
-        check = bcrypt.checkpw(rpassword.encode(), res[2].encode()) #need to encode pass bc need str not bytes 
+        check = bcrypt.checkpw(rpassword.encode(), res[2].encode()) #need to encode pass bc need convert back to bytes 
         if check is True:
             session['userid'] = res[0] #id wasnt given ny user bc used email to sign in so need to grab id from table and set to session 
             return f'Logged in as {session["userid"]}' #taken directly from flask website
