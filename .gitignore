@@ -1,0 +1,6 @@
+#needed for .env to keep password and secret key private 
+.env
+__pycache__/
+*.pyc 
+#not sure if needed ^
+.pytest_cache/
