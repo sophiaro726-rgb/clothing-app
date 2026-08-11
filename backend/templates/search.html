@@ -43,6 +43,12 @@
     {% if result.gender is not none %}
       <li>Gender: {{ result.gender }}</li>
     {% endif %}
+    {% if result.height is not none %}
+      <li>Height: {{ result.height }}</li>
+    {% endif %}
+    {% if result.weight is not none %}
+      <li>Weight: {{ result.weight }}</li>
+    {% endif %}
     {% if result.color is not none %}
       <li>Color: {{ result.color }}</li>
     {% endif %}

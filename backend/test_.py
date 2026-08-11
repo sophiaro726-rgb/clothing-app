@@ -6,10 +6,9 @@ import pytest #for fixture
 # content of test_sample.py
 #def func(x):
  #   return x + 1
-
-
 #def test_answer():
  #   assert func(3) == 5
+ 
 def test_checkhashpwd(): #need a test_ bc need pytest to read it and not skip over 
     testpassword = 'abc123'
     check1 = hash_pwd(testpassword)
@@ -40,18 +39,15 @@ def test_loginsuccess_example(client):
     )
     assert b"Logged in as" in response.data #since not grabbing userid from sql, it is checking if it wirtes these words to show it is somehwere in response and technically isnt 100% showing if correct bc not testing userid but j return statement consisting of text 
 
-@pytest.fixture()
+@pytest.fixture() #use one to not have to repeat testing app w diff tests
 def app():
     #app = create_app() DONT NEED i alr reated @app routes in my data 
     approute.config.update({
         "TESTING": True,
     })
 
-    # other setup can go here
-
     yield approute
 
-    # clean up / reset resources here
 
 
 @pytest.fixture()

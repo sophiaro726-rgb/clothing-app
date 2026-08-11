@@ -47,18 +47,30 @@ def submitted():
     rname = request.form['name']
     rcategory = request.form['category']
     rsize = request.form['size']
+    rheight = request.form['height']
+    rweight = request.form['weight']
     rgender = request.form['gender']
     rcolor = request.form['color']
     ryear = request.form['year']
     if ryear == "":
         ryear =  None #do this bc int type and causes an error
-    #photo dif bc file 
+    #photo dif bc file
+    if rgender == "":
+        rgender =  None 
+    if rheight == "":
+        rheight =  None
+    if rweight == "":
+        rweight =  None
+    if rcolor == "":
+        rcolor =  None
     f = request.files['photo'] #diff bc file 
     f.save('static/photos/' + f.filename) #dont want to hardcode name of file so not quotes to save into uploads file for flask 
     rphoto = f.filename
     ruserid = session['userid']
     rcomment = request.form['comment']
-    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo, userid, comment) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto, ruserid, rcomment))
+    if rcategory == "Shirts" and (rheight == '' or rweight == ''):
+        return "ERROR: Height and weight are required for shirt uploads"
+    curr.execute("INSERT INTO clothesinfo (brand, name, category, size, gender, color, year, photo, userid, comment, height, weight) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (rbrand, rname, rcategory, rsize, rgender, rcolor, ryear, rphoto, ruserid, rcomment, rheight, rweight))
     # columns, input values and not hard code, and then the variables being input 
     conn.commit()
     return "Your review was submitted"
@@ -72,6 +84,8 @@ def searched():
     rgender = request.args.get('gender')
     rcolor = request.args.get('color')
     ryear = request.args.get('year')
+    rheight = request.args.get('height')
+    rweight = request.args.get('weight')
     #rphoto = request.args.get('photo') dont need bc not ssearching by photo 
     selectstring = "SELECT * from clothesinfo WHERE 1=1" #cannot put into execute yet bc we dont know what variables were given in search
     #doing 1=1 bc we ant to run regardless of hwat is input into the search, but we r gonna need to filter the "AND" to what was given
@@ -97,6 +111,12 @@ def searched():
     if ryear is not None and ryear != '':
         selectstring = selectstring + " AND year = %s" #doesnt need lower bc int not text
         variablesgiven.append(ryear)
+    if rheight is not None and rheight != '':
+        selectstring = selectstring + " AND LOWER(height) = %s"
+        variablesgiven.append(rheight.lower())
+    if rweight is not None and rweight != '':
+            selectstring = selectstring + " AND LOWER(weight) = %s"
+            variablesgiven.append(rweight.lower())
     curr.execute(selectstring, variablesgiven)
     res = curr.fetchall() #before dict it prints as j a list of each value w out key attached to value 
     dictlist = [] #since gonna have multiple outpets, needs to be a list of dictionaries connecting the variables to the values
@@ -111,7 +131,9 @@ def searched():
             'color' : vlist[6],
             'year' : vlist[7],
             'photo' : vlist[8], #need photo now bc this is the returned result 
-            'comment' : vlist[10] #need comment bc returned result not searched & 9 is userid added
+            'comment' : vlist[10], #need comment bc returned result not searched & 9 is userid added
+            'height' : vlist[11],
+            'weight': vlist[12]
         }
         dictlist.append(vdict)
     return render_template('search.html', results = dictlist) #need results name bc unlike other pages it needs to grab info for as much data that matches the searched results
