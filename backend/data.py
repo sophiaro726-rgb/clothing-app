@@ -3,6 +3,11 @@ from flask import Flask, render_template  #flask is used as the backend to play 
 import psycopg2 #for sql
 from flask import request, session #session for cookies and login save 
 import bcrypt
+#.env to secure password when make public link (doesn't get pushed publically)
+from dotenv import load_dotenv #from https://pypi.org/project/python-dotenv/
+import os 
+
+load_dotenv()  # reads variables from a .env file and sets them in os.environ
 
 app = Flask(__name__)
 
@@ -26,16 +31,19 @@ def existingaccount():
 
 
 #POSTGRES CODE
-hostname = 'localhost'
-database = 'clothing_app' #what i named the db
-username = 'postgres'
-port_id = 5432
+hostname = os.getenv('hostname')
+database = os.getenv('database')
+publicusername = os.getenv('publicusername') #cant j be username bc reading my Windows username
+port_id = os.getenv('port_id')
+secretpassword = os.getenv('secretpassword')
+app.secret_key = os.getenv('app.secret_key')
 
 conn = psycopg2.connect(
     host = hostname,
     dbname = database,
-    user = username,
-    port = port_id
+    user = publicusername,
+    port = port_id,
+    password = secretpassword #needs to have this name, ok if repeated bc j inside route 
 )
 curr = conn.cursor()
 #connecting sql and submitted review 
@@ -150,8 +158,6 @@ def signup():
     curr.execute("INSERT INTO userinfo (email, hashpassword) VALUES (%s, %s)", (remail, hpassword))
     conn.commit()
     return "The account was created"
-
-app.secret_key = '675339bf8044ea91c16a2f59149c85092653f6231ebf9c55f8d08a8897cfc418' #generated 
 
 @app.route('/login.php', methods=['POST']) #just post used not get 
 def login():
